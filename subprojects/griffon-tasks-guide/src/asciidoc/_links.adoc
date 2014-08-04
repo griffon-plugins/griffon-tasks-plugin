@@ -1,0 +1,6 @@
+
+:link_swing_worker: link:http://docs.oracle.com/javase/6/docs/api/javax/swing/SwingWorker.html[SwingWorker, window="_blank"]
+:link_swing_tasks: link:https://github.com/eikek/swing-tasks[swing-tasks, window="_blank"]
+:link_api_task: link:api/griffon/plugins/tasks/Task.html[Task, window="_blank"]
+:link_api_task_manager: link:api/griffon/plugins/tasks/TaskManager.html[TaskManager, window="_blank"]
+:link_api_task_control: link:api/griffon/plugins/tasks/TaskControl.html[TaskControl, window="_blank"]

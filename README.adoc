@@ -1,0 +1,18 @@
+= griffon-tasks-plugin
+:version: 1.0.0.SNAPSHOT
+:linkattrs:
+
+image:https://travis-ci.org/griffon-plugins/griffon-tasks-plugin.png?branch=master["Build Status", link="https://travis-ci.org/griffon-plugins/griffon-tasks-plugin"]
+image:https://coveralls.io/repos/griffon-plugins/griffon-tasks-plugin/badge.png["Coverage Status", link="https://coveralls.io/r/griffon-plugins/griffon-tasks-plugin"]
+image:http://img.shields.io/:semver-{version}-red.svg["Semantic Versioning", link="http://semver.org"]
+
+---
+
+The tasks plugin provides the means to schedule and manage tasks. Tasks will
+always be executed off the UI thread. In many respects task execution follows
+the same rules as JDK's http://docs.oracle.com/javase/6/docs/api/javax/swing/SwingWorker.html[SwingWorker, window="_blank"].
+
+This plugin contains code written by Eike Kettner (https://github.com/eikek/swing-tasks[swing-tasks, window="_blank"]).
+
+Refer to the link:http://griffon-plugins.github.io/griffon-tasks-plugin/[plugin guide, window="_blank"] for
+further information on configuration and usage.
