@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<meta name="author" content="Andres Almiray">
+<title>Griffon Tasks Plugin</title>
+<link rel="stylesheet" href="./css/style.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="./coderay-asciidoctor.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Griffon Tasks Plugin</h1>
+<span id="author" class="author">Andres Almiray</span><br>
+<span id="revnumber">version 1.0.0-SNAPSHOT</span>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_creating_tasks">1.1. Creating Tasks</a></li>
+<li><a href="#_taskmanager">1.2. TaskManager</a></li>
+<li><a href="#_executing_and_controlling_tasks">1.3. Executing and controlling Tasks</a></li>
+<li><a href="#_listeners">1.4. Listeners</a></li>
+</ul>
+</li>
+<li><a href="#_configuration">2. Build Configuration</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_gradle">2.1. Gradle</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#_automatic">2.1.1. Automatic</a></li>
+<li><a href="#_manual">2.1.2. Manual</a></li>
+</ul>
+</li>
+<li><a href="#_maven">2.2. Maven</a></li>
+</ul>
+</li>
+<li><a href="#_modules">3. Modules</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_theme">3.1. Theme</a></li>
+</ul>
+</li>
+<li><a href="#_links">4. Links</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The tasks plugin provides the means to schedule and manage tasks. Tasks will
+always be executed off the UI thread. In many respects task execution follows
+the same rules as JDK&#8217;s <a href="http://docs.oracle.com/javase/6/docs/api/javax/swing/SwingWorker.html" target="_blank">SwingWorker</a>.</p>
+</div>
+<div class="paragraph">
+<p>This plugin contains code written by Eike Kettner (<a href="https://github.com/eikek/swing-tasks" target="_blank">swing-tasks</a>).</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_tasks"><a class="anchor" href="#_creating_tasks"></a>1.1. Creating Tasks</h3>
+<div class="paragraph">
+<p>Tasks must implement the <code><a href="api/griffon/plugins/tasks/Task.html" target="_blank">Task</a></code> interface. There is a helper class
+(<code>AbstractTask</code>) which can be subclassed, for which the <code>execute()</code> method must
+be implemented as a minimum. This method should contain the long running code.</p>
+</div>
+<div class="paragraph">
+<p>The following example depicts a Task used to find the first N prime numbers</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay nowrap"><code class="java language-java"><span class="line-numbers"> 1</span><span class="keyword">import</span> <span class="include">griffon.plugins.tasks.Tracker</span>;
+<span class="line-numbers"> 2</span><span class="keyword">import</span> <span class="include">org.codehaus.griffon.runtime.tasks.AbstractTask</span>;
+<span class="line-numbers"> 3</span>
+<span class="line-numbers"> 4</span><span class="directive">public</span> <span class="type">class</span> <span class="class">PrimeNumbersTask</span> <span class="directive">extends</span> AbstractTask&lt;<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt;, <span class="predefined-type">Integer</span>&gt; {
+<span class="line-numbers"> 5</span>    <span class="directive">public</span> PrimeNumbersTask(<span class="type">int</span> numbersToFind) {
+<span class="line-numbers"> 6</span>        <span class="comment">//initialize</span>
+<span class="line-numbers"> 7</span>    }
+<span class="line-numbers"> 8</span>
+<span class="line-numbers"> 9</span>    <span class="annotation">@Override</span>
+<span class="line-numbers"><strong>10</strong></span>    <span class="directive">public</span> <span class="predefined-type">Integer</span> execute(Tracker&lt;<span class="predefined-type">Integer</span>&gt; tracker) <span class="directive">throws</span> <span class="exception">Exception</span> {
+<span class="line-numbers">11</span>        <span class="keyword">while</span> (!enough &amp;&amp; !isCancelled()) {
+<span class="line-numbers">12</span>            <span class="type">int</span> number = nextPrimeNumber();
+<span class="line-numbers">13</span>            tracker.publish(number);
+<span class="line-numbers">14</span>            tracker.setProgress(<span class="integer">100</span> * numbers.size() / numbersToFind);
+<span class="line-numbers">15</span>        }
+<span class="line-numbers">16</span>        <span class="keyword">return</span> <span class="integer">0</span>;
+<span class="line-numbers">17</span>    }
+<span class="line-numbers">18</span>}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_taskmanager"><a class="anchor" href="#_taskmanager"></a>1.2. TaskManager</h3>
+<div class="paragraph">
+<p>The <code><a href="api/griffon/plugins/tasks/TaskManager.html" target="_blank">TaskManager</a></code> is the entry point for scheduling tasks. It is used to create
+<code>TaskControl</code> instances, register listeners and find currently running tasks.</p>
+</div>
+<div class="paragraph">
+<p>You can provide your own implementation by binding it inside a Module.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_executing_and_controlling_tasks"><a class="anchor" href="#_executing_and_controlling_tasks"></a>1.3. Executing and controlling Tasks</h3>
+<div class="paragraph">
+<p>Use the <code>TaskManager</code> to create a <code>TaskControl</code> object and invoke its <code>execute()</code>
+method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay nowrap"><code class="java language-java">TaskControl taskControl = taskManager.create(<span class="keyword">new</span> PrimeNumbersTask(<span class="integer">10</span>));
+taskControl.execute();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>execute()</code> method will return immediately and submit the task for
+execution. Now the <code><a href="api/griffon/plugins/tasks/TaskControl.html" target="_blank">TaskControl</a></code> can be used to cancel the execution of the
+task. The method <code>waitFor()</code> can be invoked to wait for the task to finish.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listeners"><a class="anchor" href="#_listeners"></a>1.4. Listeners</h3>
+<div class="paragraph">
+<p>You can register TaskListeners to receive notifications on tasks. There are 3
+different ways to register listeners concerning the scope of events received:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>register on TaskManager (use <code>taskManager.getTaskListenerSupport()</code>) to
+receive events for all tasks</p>
+</li>
+<li>
+<p>register on TaskManager using a <em>taskId</em> to receive events for tasks of the
+given <em>taskId</em></p>
+</li>
+<li>
+<p>register on a TaskControl (use <code>taskControl.getTaskContext()</code>) to receive
+events solely for one execution</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>2. Build Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_gradle"><a class="anchor" href="#_gradle"></a>2.1. Gradle</h3>
+<div class="paragraph">
+<p>You have two options for configuring this plugin: automatic and manual.</p>
+</div>
+<div class="sect3">
+<h4 id="_automatic"><a class="anchor" href="#_automatic"></a>2.1.1. Automatic</h4>
+<div class="paragraph">
+<p>As long as the project has the <code>org.codehaus.griffon.griffon</code> plugin applied to it you
+may include the following snippet in <code>build.gradle</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay nowrap"><code class="groovy language-groovy">dependencies {
+    griffon 'org.codehaus.griffon.plugins:griffon-tasks-plugin:1.0.0-SNAPSHOT'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>griffon</code> plugin will take care of the rest given its configuration.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_manual"><a class="anchor" href="#_manual"></a>2.1.2. Manual</h4>
+<div class="paragraph">
+<p>You will need to configure any of the following blocks depending on your setup</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay nowrap"><code class="groovy language-groovy">dependencies {
+    compile 'org.codehaus.griffon.plugins:griffon-tasks-core:1.0.0-SNAPSHOT'
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_maven"><a class="anchor" href="#_maven"></a>2.2. Maven</h3>
+<div class="paragraph">
+<p>First configure the <code>griffon-tasks-plugin</code> BOM in your POM file, by placing the following
+snippet before the <code>&lt;build&gt;</code> element</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay nowrap"><code class="xml language-xml"><span class="tag">&lt;dependencyManagement&gt;</span>
+    <span class="tag">&lt;dependencies&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>griffon-tasks-plugin<span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;version&gt;</span>1.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+            <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
+            <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+    <span class="tag">&lt;/dependencies&gt;</span>
+<span class="tag">&lt;/dependencyManagement&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next configure dependencies as required by your particular setup</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay nowrap"><code class="xml language-xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>griffon-tasks-core<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_modules"><a class="anchor" href="#_modules"></a>3. Modules</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following sections display all bindings per module. Use this information to
+successfully override a binding on your own modules or to troubleshoot a module
+binding if the wrong type has been applied by the Griffon runtime.</p>
+</div>
+<div class="sect2">
+<h3 id="_theme"><a class="anchor" href="#_theme"></a>3.1. Theme</h3>
+<div class="paragraph">
+<p>Module name: <code>tasks</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay nowrap"><code class="java language-java">bind(TaskManager.class)
+    .to(NonBlockingTaskManager.class)
+    .asSingleton();</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_links"><a class="anchor" href="#_links"></a>4. Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="api/index.html" target="_blank">Javadoc</a></p>
+</div>
+<div class="paragraph">
+<p><a href="api-src/index.html" target="_blank">API Sources</a></p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 1.0.0-SNAPSHOT<br>
+Last updated 2014-08-04 15:25:07 CEST
+</div>
+</div>
+</body>
+</html>
