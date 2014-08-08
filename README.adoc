@@ -1,11 +1,13 @@
 = griffon-tasks-plugin
 :version: 1.0.0.SNAPSHOT
 :linkattrs:
+:project-name: griffon-tasks-plugin
 
-image:http://img.shields.io/travis/griffon-plugins/griffon-tasks-plugin/master.svg["Build Status", link="https://travis-ci.org/griffon-plugins/griffon-tasks-plugin"]
-image:http://img.shields.io/coveralls/griffon-plugins/griffon-tasks-plugin/master.svg["Coverage Status", link="https://coveralls.io/r/griffon-plugins/griffon-tasks-plugin"]
+image:http://img.shields.io/travis/griffon-plugins/{project-name}/master.svg["Build Status", link="https://travis-ci.org/griffon-plugins/{project-name}"]
+image:http://img.shields.io/coveralls/griffon-plugins/{project-name}/master.svg["Coverage Status", link="https://coveralls.io/r/griffon-plugins/{project-name}"]
 image:http://img.shields.io/:semver-{version}-blue.svg["Semantic Versioning", link="http://semver.org"]
 image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
+image:http://img.shields.io/badge/download-BOM-bb00bb.svg[link="https://bintray.com/griffon/griffon-plugins/{project-name}/_latestVersion"]
 
 ---
 
@@ -15,5 +17,5 @@ the same rules as JDK's http://docs.oracle.com/javase/6/docs/api/javax/swing/Swi
 
 This plugin contains code written by Eike Kettner (https://github.com/eikek/swing-tasks[swing-tasks, window="_blank"]).
 
-Refer to the link:http://griffon-plugins.github.io/griffon-tasks-plugin/[plugin guide, window="_blank"] for
+Refer to the link:http://griffon-plugins.github.io/{project-name}/[plugin guide, window="_blank"] for
 further information on configuration and usage.
