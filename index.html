@@ -4,23 +4,24 @@
 <meta charset="utf-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<meta name="generator" content="Asciidoctor 1.5.0">
 <meta name="author" content="Andres Almiray">
 <title>Griffon Tasks Plugin</title>
 <link rel="stylesheet" href="./css/style.css">
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="./coderay-asciidoctor.css">
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
 <h1>Griffon Tasks Plugin</h1>
+<div class="details">
 <span id="author" class="author">Andres Almiray</span><br>
-<span id="revnumber">version 1.0.0-SNAPSHOT</span>
+<span id="revnumber">version 1.0.0</span>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_introduction">1. Introduction</a></li>
-<li>
+<li><a href="#_introduction">1. Introduction</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_tasks">1.1. Creating Tasks</a></li>
 <li><a href="#_taskmanager">1.2. TaskManager</a></li>
@@ -28,11 +29,9 @@
 <li><a href="#_listeners">1.4. Listeners</a></li>
 </ul>
 </li>
-<li><a href="#_configuration">2. Build Configuration</a></li>
-<li>
+<li><a href="#_configuration">2. Build Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_gradle">2.1. Gradle</a></li>
-<li>
+<li><a href="#_gradle">2.1. Gradle</a>
 <ul class="sectlevel3">
 <li><a href="#_automatic">2.1.1. Automatic</a></li>
 <li><a href="#_manual">2.1.2. Manual</a></li>
@@ -41,8 +40,7 @@
 <li><a href="#_maven">2.2. Maven</a></li>
 </ul>
 </li>
-<li><a href="#_modules">3. Modules</a></li>
-<li>
+<li><a href="#_modules">3. Modules</a>
 <ul class="sectlevel2">
 <li><a href="#_theme">3.1. Theme</a></li>
 </ul>
@@ -75,24 +73,45 @@ be implemented as a minimum. This method should contain the long running code.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="java language-java"><span class="line-numbers"> 1</span><span class="keyword">import</span> <span class="include">griffon.plugins.tasks.Tracker</span>;
-<span class="line-numbers"> 2</span><span class="keyword">import</span> <span class="include">org.codehaus.griffon.runtime.tasks.AbstractTask</span>;
-<span class="line-numbers"> 3</span>
-<span class="line-numbers"> 4</span><span class="directive">public</span> <span class="type">class</span> <span class="class">PrimeNumbersTask</span> <span class="directive">extends</span> AbstractTask&lt;<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt;, <span class="predefined-type">Integer</span>&gt; {
-<span class="line-numbers"> 5</span>    <span class="directive">public</span> PrimeNumbersTask(<span class="type">int</span> numbersToFind) {
-<span class="line-numbers"> 6</span>        <span class="comment">//initialize</span>
-<span class="line-numbers"> 7</span>    }
-<span class="line-numbers"> 8</span>
-<span class="line-numbers"> 9</span>    <span class="annotation">@Override</span>
-<span class="line-numbers"><strong>10</strong></span>    <span class="directive">public</span> <span class="predefined-type">Integer</span> execute(Tracker&lt;<span class="predefined-type">Integer</span>&gt; tracker) <span class="directive">throws</span> <span class="exception">Exception</span> {
-<span class="line-numbers">11</span>        <span class="keyword">while</span> (!enough &amp;&amp; !isCancelled()) {
-<span class="line-numbers">12</span>            <span class="type">int</span> number = nextPrimeNumber();
-<span class="line-numbers">13</span>            tracker.publish(number);
-<span class="line-numbers">14</span>            tracker.setProgress(<span class="integer">100</span> * numbers.size() / numbersToFind);
-<span class="line-numbers">15</span>        }
-<span class="line-numbers">16</span>        <span class="keyword">return</span> <span class="integer">0</span>;
-<span class="line-numbers">17</span>    }
-<span class="line-numbers">18</span>}</code></pre>
+<pre class="CodeRay highlight nowrap"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+<strong>10</strong>
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td>
+  <td class="code"><pre><span class="keyword">import</span> <span class="include">griffon.plugins.tasks.Tracker</span>;
+<span class="keyword">import</span> <span class="include">org.codehaus.griffon.runtime.tasks.AbstractTask</span>;
+
+<span class="directive">public</span> <span class="type">class</span> <span class="class">PrimeNumbersTask</span> <span class="directive">extends</span> AbstractTask&lt;<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt;, <span class="predefined-type">Integer</span>&gt; {
+    <span class="directive">public</span> PrimeNumbersTask(<span class="type">int</span> numbersToFind) {
+        <span class="comment">//initialize</span>
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="predefined-type">Integer</span> execute(Tracker&lt;<span class="predefined-type">Integer</span>&gt; tracker) <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="keyword">while</span> (!enough &amp;&amp; !isCancelled()) {
+            <span class="type">int</span> number = nextPrimeNumber();
+            tracker.publish(number);
+            tracker.setProgress(<span class="integer">100</span> * numbers.size() / numbersToFind);
+        }
+        <span class="keyword">return</span> <span class="integer">0</span>;
+    }
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
@@ -114,7 +133,7 @@ method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="java language-java">TaskControl taskControl = taskManager.create(<span class="keyword">new</span> PrimeNumbersTask(<span class="integer">10</span>));
+<pre class="CodeRay highlight nowrap"><code data-lang="java">TaskControl taskControl = taskManager.create(<span class="keyword">new</span> PrimeNumbersTask(<span class="integer">10</span>));
 taskControl.execute();</code></pre>
 </div>
 </div>
@@ -165,8 +184,8 @@ may include the following snippet in <code>build.gradle</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="groovy language-groovy">dependencies {
-    griffon 'org.codehaus.griffon.plugins:griffon-tasks-plugin:1.0.0-SNAPSHOT'
+<pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
+    griffon 'org.codehaus.griffon.plugins:griffon-tasks-plugin:1.0.0'
 }</code></pre>
 </div>
 </div>
@@ -181,8 +200,8 @@ may include the following snippet in <code>build.gradle</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="groovy language-groovy">dependencies {
-    compile 'org.codehaus.griffon.plugins:griffon-tasks-core:1.0.0-SNAPSHOT'
+<pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
+    compile 'org.codehaus.griffon.plugins:griffon-tasks-core:1.0.0'
 }</code></pre>
 </div>
 </div>
@@ -196,12 +215,12 @@ snippet before the <code>&lt;build&gt;</code> element</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="xml language-xml"><span class="tag">&lt;dependencyManagement&gt;</span>
+<pre class="CodeRay highlight nowrap"><code data-lang="xml"><span class="tag">&lt;dependencyManagement&gt;</span>
     <span class="tag">&lt;dependencies&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>griffon-tasks-plugin<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;version&gt;</span>1.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+            <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
             <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
             <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
@@ -214,7 +233,7 @@ snippet before the <code>&lt;build&gt;</code> element</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="xml language-xml"><span class="tag">&lt;dependency&gt;</span>
+<pre class="CodeRay highlight nowrap"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>griffon-tasks-core<span class="tag">&lt;/artifactId&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
@@ -238,7 +257,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="java language-java">bind(TaskManager.class)
+<pre class="CodeRay highlight nowrap"><code data-lang="java">bind(TaskManager.class)
     .to(NonBlockingTaskManager.class)
     .asSingleton();</code></pre>
 </div>
@@ -260,8 +279,8 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.0-SNAPSHOT<br>
-Last updated 2014-08-04 15:25:07 CEST
+Version 1.0.0<br>
+Last updated 2014-08-19 08:56:17 CDT
 </div>
 </div>
 </body>
