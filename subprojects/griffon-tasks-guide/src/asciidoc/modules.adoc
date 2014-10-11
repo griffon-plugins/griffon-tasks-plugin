@@ -12,7 +12,7 @@ binding if the wrong type has been applied by the Griffon runtime.
 
 == Theme
 
-Module name: +tasks+
+Module name: `tasks`
 
 [source,java,options="nowrap"]
 ----
