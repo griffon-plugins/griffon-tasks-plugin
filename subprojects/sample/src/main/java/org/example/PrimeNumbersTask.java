@@ -15,7 +15,6 @@
  */
 package org.example;
 
-import griffon.plugins.tasks.TaskContext;
 import griffon.plugins.tasks.Tracker;
 import javafx.collections.ObservableList;
 import org.codehaus.griffon.runtime.tasks.AbstractTask;
