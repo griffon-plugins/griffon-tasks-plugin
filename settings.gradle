@@ -1,5 +1,6 @@
 include 'subprojects/griffon-tasks-core'
 include 'subprojects/griffon-tasks-guide'
+include 'subprojects/sample'
 
 rootProject.name = 'griffon-tasks-plugin'
 rootProject.children.each { project ->

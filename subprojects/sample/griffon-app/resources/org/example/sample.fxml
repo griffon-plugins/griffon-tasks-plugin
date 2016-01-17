@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014-2016 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane prefHeight="360.0" prefWidth="300.0"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.SampleController">
+    <padding>
+        <Insets top="20" left="20" bottom="20" right="20"/>
+    </padding>
+    <center>
+        <VBox spacing="10" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets top="10" left="10" bottom="10" right="10"/>
+            </BorderPane.margin>
+
+            <HBox>
+                <Label wrapText="true" HBox.hgrow="ALWAYS"
+                       text="Input a number between 1 and 100"/>
+                <TextField fx:id="count" text="5" alignment="CENTER_RIGHT"/>
+            </HBox>
+
+            <GridPane>
+                <Button fx:id="startActionTarget"
+                        prefWidth="150.0"
+                        GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Button fx:id="cancelActionTarget"
+                        prefWidth="150.0"
+                        GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            </GridPane>
+            <ProgressBar fx:id="progressBar"
+                         prefWidth="400.0"
+                         GridPane.columnSpan="2"
+                         GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <ScrollPane>
+                <TextArea fx:id="result" wrapText="true" editable="false"
+                prefColumnCount="16"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

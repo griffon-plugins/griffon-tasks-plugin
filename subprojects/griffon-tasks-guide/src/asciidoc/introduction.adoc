@@ -72,3 +72,5 @@ different ways to register listeners concerning the scope of events received:
  * register on a TaskControl (use `taskControl.getTaskContext()`) to receive
    events solely for one execution
 
+Griffon version: {griffon-version}
+
