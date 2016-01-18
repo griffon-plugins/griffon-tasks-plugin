@@ -40,8 +40,7 @@ public class SampleController extends AbstractGriffonController {
     }
 
     public void start() {
-        PrimeNumbersTask task = new PrimeNumbersTask(model.getCount());
-        task.setPrimes(model.getPrimes());
+        PrimeNumbersTask task = new PrimeNumbersTask(model.getCount(), model.getPrimes());
         taskControl = taskManager.create(task);
         taskControl.getContext().addListener(new TaskListenerAdapter() {
             @Override
@@ -54,7 +53,6 @@ public class SampleController extends AbstractGriffonController {
                 switch (event.getNewValue()) {
                     case STARTED:
                         model.setRunning(true);
-                        model.getPrimes().clear();
                         break;
                     case DONE:
                     case CANCELLED:

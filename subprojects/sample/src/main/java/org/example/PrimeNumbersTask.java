@@ -16,30 +16,31 @@
 package org.example;
 
 import griffon.plugins.tasks.Tracker;
-import javafx.collections.ObservableList;
 import org.codehaus.griffon.runtime.tasks.AbstractTask;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static griffon.util.GriffonClassUtils.requireState;
+import static java.util.Objects.requireNonNull;
+
 public class PrimeNumbersTask extends AbstractTask<List<Integer>, Integer> {
     private final int numbersToFind;
     private final List<Integer> numbers = new ArrayList<>();
-    private ObservableList<Integer> primes;
+    private final List<Integer> accumulator;
 
-    public PrimeNumbersTask(int numbersToFind) {
+    public PrimeNumbersTask(int numbersToFind, @Nonnull List<Integer> accumulator) {
         super(PrimeNumbersTask.class.getSimpleName() + "-" + System.currentTimeMillis());
+        requireState(numbersToFind > 0, "The quantity of prime numbers to find must be greater than zero");
         this.numbersToFind = numbersToFind;
-    }
-
-    public void setPrimes(ObservableList<Integer> primes) {
-        this.primes = primes;
+        this.accumulator = requireNonNull(accumulator, "Argument 'accumulator' must not be null");
     }
 
     @Override
     public List<Integer> execute(Tracker<Integer> tracker) throws Exception {
         int candidate = -1;
+        accumulator.clear();
         while (numbers.size() < numbersToFind) {
             candidate = nextPrimeNumber(++candidate);
             numbers.add(candidate);
@@ -52,7 +53,7 @@ public class PrimeNumbersTask extends AbstractTask<List<Integer>, Integer> {
 
     @Override
     public void process(@Nonnull List<Integer> chunks) {
-        primes.addAll(chunks);
+        accumulator.addAll(chunks);
     }
 
     private int nextPrimeNumber(int candidate) {
