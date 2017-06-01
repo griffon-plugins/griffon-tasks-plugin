@@ -5,12 +5,13 @@ griffon {
     disableDependencyResolution = false
     includeGroovyDependencies = false
     version = rootProject.griffonVersion
+    applicationProject = false
 }
 
 apply from: rootProject.file('gradle/code-coverage.gradle')
 
 dependencies {
     testRuntime "org.codehaus.griffon:griffon-guice:${griffon.version}"
-    testRuntime 'org.slf4j:slf4j-simple:1.7.12'
+    testRuntime "org.slf4j:slf4j-simple:$slf4jVersion"
 }
 
