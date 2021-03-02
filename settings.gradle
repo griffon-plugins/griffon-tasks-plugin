@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: Apache-2.0
  *
- * Copyright 2014-2020 The author and/or original authors.
+ * Copyright 2014-2021 The author and/or original authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ buildscript {
     dependencies {
         classpath "org.codehaus.griffon:griffon-plugin-gradle-plugin:$griffonVersion"
         classpath "org.codehaus.griffon:griffon-gradle-plugin:$griffonVersion"
-        classpath "org.kordamp.gradle:enforcer-gradle-plugin:0.5.0"
+        classpath "org.kordamp.gradle:enforcer-gradle-plugin:0.9.0"
     }
 }
 apply plugin: 'org.codehaus.griffon.plugin'
@@ -34,7 +34,9 @@ rootProject.name = 'griffon-tasks-plugin'
 enforce {
     rule(enforcer.rules.ForceDependencies) { r ->
         r.dependencies.addAll "org.slf4j:slf4j-api:$slf4jVersion",
-            "org.junit.jupiter:junit-jupiter-engine:$junit5Version",
+            "org.junit:junit-bom:$junit5Version",
+            "org.junit.jupiter:junit-jupiter-api:$junit5Version",
+            "org.junit.platform:junit-platform-engine:$junitPlatformVersion",
             "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
     }
 }
